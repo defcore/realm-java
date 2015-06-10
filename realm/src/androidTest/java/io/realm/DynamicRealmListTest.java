@@ -1,5 +1,5 @@
-package io.realm;/*
- * Copyright 2014 Realm Inc.
+/*
+ * Copyright 2015 Realm Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,12 @@ package io.realm;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.realm;
 
 import android.test.AndroidTestCase;
 
 import java.util.Date;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.dynamic.DynamicRealmList;
 import io.realm.dynamic.DynamicRealmObject;
 import io.realm.entities.AllJavaTypes;
@@ -38,17 +37,17 @@ public class DynamicRealmListTest extends AndroidTestCase {
         realm = Realm.getInstance(realmConfig);
         realm.beginTransaction();
         AllJavaTypes obj = realm.createObject(AllJavaTypes.class);
-        obj.setColumnString("str");
-        obj.setColumnShort((short) 1);
-        obj.setColumnInt(1);
-        obj.setColumnLong(1);
-        obj.setColumnFloat(1.23f);
-        obj.setColumnDouble(1.234d);
-        obj.setColumnBinary(new byte[]{1, 2, 3});
-        obj.setColumnBoolean(true);
-        obj.setColumnDate(new Date(1000));
-        obj.setColumnObject(obj);
-        obj.getColumnList().add(obj);
+        obj.setFieldString("str");
+        obj.setFieldShort((short) 1);
+        obj.setFieldInt(1);
+        obj.setFieldLong(1);
+        obj.setFieldFloat(1.23f);
+        obj.setFieldDouble(1.234d);
+        obj.setFieldBinary(new byte[]{1, 2, 3});
+        obj.setFieldBoolean(true);
+        obj.setFieldDate(new Date(1000));
+        obj.setFieldObject(obj);
+        obj.getFieldList().add(obj);
         dynamicObject = new DynamicRealmObject(realm, obj.row);
         dynamicList = dynamicObject.getRealmList("columnList");
         realm.commitTransaction();
@@ -191,7 +190,7 @@ public class DynamicRealmListTest extends AndroidTestCase {
     public void testSet() {
         realm.beginTransaction();
         AllJavaTypes obj = realm.createObject(AllJavaTypes.class);
-        obj.setColumnLong(2);
+        obj.setFieldLong(2);
         dynamicList.set(0, new DynamicRealmObject(realm, obj.row));
         realm.commitTransaction();
 

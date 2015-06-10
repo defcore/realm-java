@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Realm Inc.
+ * Copyright 2015 Realm Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.realm.dynamic;
 
 import java.util.AbstractList;
@@ -50,23 +49,23 @@ public class DynamicRealmList extends AbstractList<DynamicRealmObject> {
     }
 
     @Override
-    public DynamicRealmObject get(int location) {
-        checkValidIndex(location);
-        return new DynamicRealmObject(realm, linkView.get(location));
+    public DynamicRealmObject get(int index) {
+        checkValidIndex(index);
+        return new DynamicRealmObject(realm, linkView.get(index));
     }
 
     @Override
-    public DynamicRealmObject remove(int location) {
-        DynamicRealmObject removedItem = get(location);
-        linkView.remove(location);
+    public DynamicRealmObject remove(int index) {
+        DynamicRealmObject removedItem = get(index);
+        linkView.remove(index);
         return removedItem;
     }
 
     @Override
-    public DynamicRealmObject set(int location, DynamicRealmObject object) {
+    public DynamicRealmObject set(int index, DynamicRealmObject object) {
         checkIsValidObject(object);
-        checkValidIndex(location);
-        linkView.set(location, object.row.getIndex());
+        checkValidIndex(index);
+        linkView.set(index, object.row.getIndex());
         return object;
     }
 
@@ -80,7 +79,7 @@ public class DynamicRealmList extends AbstractList<DynamicRealmObject> {
             throw new IllegalArgumentException("DynamicRealmList does not accept null values");
         }
         if (!realm.getPath().equals(object.realm.getPath())) {
-            throw new IllegalArgumentException("Cannot add a object belonging already in another Realm");
+            throw new IllegalArgumentException("Cannot add an object already belonging to another Realm");
         }
         if (!linkView.getTable().hasSameSchema(object.row.getTable())) {
             String expectedClass = linkView.getTable().getName();
@@ -89,10 +88,10 @@ public class DynamicRealmList extends AbstractList<DynamicRealmObject> {
         }
     }
 
-    private void checkValidIndex(int location) {
+    private void checkValidIndex(int index) {
         long size = linkView.size();
-        if (location < 0 || location >= size) {
-            throw new IndexOutOfBoundsException(String.format("Invalid index: %s. Valid range is [%s, %s]", location, 0, size - 1));
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException(String.format("Invalid index: %s. Valid range is [%s, %s]", index, 0, size - 1));
         }
     }
 

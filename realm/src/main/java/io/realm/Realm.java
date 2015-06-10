@@ -1808,9 +1808,6 @@ public final class Realm implements Closeable {
         }
     }
 
-
-
-
     /**
      * Encapsulates a Realm transaction.
      * <p>

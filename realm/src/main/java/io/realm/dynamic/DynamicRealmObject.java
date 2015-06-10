@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Realm Inc.
+ * Copyright 2015 Realm Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.realm.dynamic;
 
 import java.util.ArrayList;
@@ -185,19 +184,29 @@ public class DynamicRealmObject {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         DynamicRealmObject other = (DynamicRealmObject) o;
 
         String path = realm.getPath();
         String otherPath = other.realm.getPath();
-        if (path != null ? !path.equals(otherPath) : otherPath != null) return false;;
+        if (path != null ? !path.equals(otherPath) : otherPath != null) {
+            return false;
+        }
 
         String tableName = row.getTable().getName();
         String otherTableName = other.row.getTable().getName();
-        if (tableName != null ? !tableName.equals(otherTableName) : otherTableName != null) return false;
+        if (tableName != null ? !tableName.equals(otherTableName) : otherTableName != null) {
+            return false;
+        }
 
-        if (row.getIndex() != other.row.getIndex()) return false;
+        if (row.getIndex() != other.row.getIndex()) {
+            return false;
+        }
 
         return true;
     }

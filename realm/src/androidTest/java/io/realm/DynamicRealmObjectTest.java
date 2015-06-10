@@ -1,5 +1,5 @@
-package io.realm;/*
- * Copyright 2014 Realm Inc.
+/*
+ * Copyright 2015 Realm Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@ package io.realm;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.realm;
 
 import android.test.AndroidTestCase;
 
@@ -20,8 +21,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.dynamic.DynamicRealmList;
 import io.realm.dynamic.DynamicRealmObject;
 import io.realm.entities.AllJavaTypes;
@@ -40,17 +39,17 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
         realm = Realm.getInstance(realmConfig);
         realm.beginTransaction();
         AllJavaTypes obj = realm.createObject(AllJavaTypes.class);
-        obj.setColumnString("str");
-        obj.setColumnShort((short) 1);
-        obj.setColumnInt(1);
-        obj.setColumnLong(1);
-        obj.setColumnFloat(1.23f);
-        obj.setColumnDouble(1.234d);
-        obj.setColumnBinary(new byte[]{1, 2, 3});
-        obj.setColumnBoolean(true);
-        obj.setColumnDate(new Date(1000));
-        obj.setColumnObject(obj);
-        obj.getColumnList().add(obj);
+        obj.setFieldString("str");
+        obj.setFieldShort((short) 1);
+        obj.setFieldInt(1);
+        obj.setFieldLong(1);
+        obj.setFieldFloat(1.23f);
+        obj.setFieldDouble(1.234d);
+        obj.setFieldBinary(new byte[]{1, 2, 3});
+        obj.setFieldBoolean(true);
+        obj.setFieldDate(new Date(1000));
+        obj.setFieldObject(obj);
+        obj.getFieldList().add(obj);
         dObj = new DynamicRealmObject(realm, obj.row);
         realm.commitTransaction();
     }
@@ -63,7 +62,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetBooleanIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnString");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_STRING);
         for (String argument : arguments) {
             try {
                 dObj.getBoolean(argument);
@@ -74,12 +73,12 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetBoolean() {
-        assertTrue(dObj.getBoolean("columnBoolean"));
+        assertTrue(dObj.getBoolean(AllJavaTypes.FIELD_BOOLEAN));
     }
 
     public void testGetLinkedBoolean() {
         try {
-            dObj.getBoolean("columnObject.columnBoolean");
+            dObj.getBoolean(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_BOOLEAN);
             fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -87,7 +86,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetShortIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnString");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_STRING);
         for (String argument : arguments) {
             try {
                 dObj.getShort(argument);
@@ -98,12 +97,12 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetShort() {
-        assertEquals(1, dObj.getShort("columnShort"));
+        assertEquals(1, dObj.getShort(AllJavaTypes.FIELD_SHORT));
     }
 
     public void testGetLinkedShort() {
         try {
-            dObj.getShort("columnObject.columnShort");
+            dObj.getShort(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_SHORT);
             fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -111,7 +110,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetIntIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnString");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_STRING);
         for (String argument : arguments) {
             try {
                 dObj.getInt(argument);
@@ -122,12 +121,12 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetInt() {
-        assertEquals(1, dObj.getInt("columnInt"));
+        assertEquals(1, dObj.getInt(AllJavaTypes.FIELD_INT));
     }
 
     public void testGetLinkedInt() {
         try {
-            dObj.getInt("columnObject.columnInt");
+            dObj.getInt(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_INT);
             fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -135,7 +134,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetLongIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnString");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_STRING);
         for (String argument : arguments) {
             try {
                 dObj.getLong(argument);
@@ -146,12 +145,12 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetLong() {
-        assertEquals(1, dObj.getLong("columnLong"));
+        assertEquals(1, dObj.getLong(AllJavaTypes.FIELD_LONG));
     }
 
     public void testGetLinkedLong() {
         try {
-            dObj.getLong("columnObject.columnLong");
+            dObj.getLong(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_LONG);
             fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -159,7 +158,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetFloatIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnString");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_STRING);
         for (String argument : arguments) {
             try {
                 dObj.getFloat(argument);
@@ -170,12 +169,12 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetFloat() {
-        assertEquals(1.23f, dObj.getFloat("columnFloat"));
+        assertEquals(1.23f, dObj.getFloat(AllJavaTypes.FIELD_FLOAT));
     }
 
     public void testGetLinkedFloat() {
         try {
-            dObj.getFloat("columnObject.columnFloat");
+            dObj.getFloat(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_FLOAT);
             fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -183,7 +182,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetDoubleIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnString");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_STRING);
         for (String argument : arguments) {
             try {
                 dObj.getFloat(argument);
@@ -194,12 +193,12 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetDouble() {
-        assertEquals(1.234d, dObj.getDouble("columnDouble"));
+        assertEquals(1.234d, dObj.getDouble(AllJavaTypes.FIELD_DOUBLE));
     }
 
     public void testGetLinkedDouble() {
         try {
-            dObj.getDouble("columnObject.columnDouble");
+            dObj.getDouble(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_DOUBLE);
             fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -207,7 +206,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetBytesIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnString");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_STRING);
         for (String argument : arguments) {
             try {
                 dObj.getBytes(argument);
@@ -218,12 +217,12 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetBytes() {
-        assertArrayEquals(new byte[]{1, 2, 3}, dObj.getBytes("columnBinary"));
+        assertArrayEquals(new byte[]{1, 2, 3}, dObj.getBytes(AllJavaTypes.FIELD_BINARY));
     }
 
     public void testGetLinkedBytes() {
         try {
-            dObj.getDouble("columnObject.columnBinary");
+            dObj.getDouble(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_BINARY);
             fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -231,7 +230,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetDateIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnString");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_STRING);
         for (String argument : arguments) {
             try {
                 dObj.getDate(argument);
@@ -242,12 +241,12 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetDate() {
-        assertEquals(new Date(1000), dObj.getDate("columnDate"));
+        assertEquals(new Date(1000), dObj.getDate(AllJavaTypes.FIELD_DATE));
     }
 
     public void testGetLinkedDate() {
         try {
-            dObj.getDate("columnObject.columnDate");
+            dObj.getDate(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_DATE);
             fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -255,7 +254,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetStringIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnInt");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_INT);
         for (String argument : arguments) {
             try {
                 dObj.getString(argument);
@@ -266,12 +265,12 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetString() {
-        assertEquals("str", dObj.getString("columnString"));
+        assertEquals("str", dObj.getString(AllJavaTypes.FIELD_STRING));
     }
 
     public void testGetLinkedString() {
         try {
-            dObj.getDate("columnObject.columnString");
+            dObj.getDate(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_STRING);
             fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -279,7 +278,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
 
     // Test invalid input: <empty, non-existing field, wrong field type>
     public void testGetObjectIllegalArguments() {
-        List<String> arguments = Arrays.asList(null, "foo", "columnString");
+        List<String> arguments = Arrays.asList(null, "foo", AllJavaTypes.FIELD_STRING);
         for (String argument : arguments) {
             try {
                 dObj.getRealmObject(argument);
@@ -290,26 +289,27 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
     }
 
     public void testGetObject() {
-        assertEquals(dObj, dObj.getRealmObject("columnObject"));
+        assertEquals(dObj, dObj.getRealmObject(AllJavaTypes.FIELD_OBJECT));
     }
 
     public void testGetLinkedObject() {
         try {
-            dObj.getRealmObject("columnObject.columnObject");
+            dObj.getRealmObject(AllJavaTypes.FIELD_OBJECT + "." + AllJavaTypes.FIELD_OBJECT);
             fail();
         } catch (IllegalArgumentException expected) {
         }
     }
 
     public void testGetList() {
-        DynamicRealmList list = dObj.getRealmList("columnList");
+        DynamicRealmList list = dObj.getRealmList(AllJavaTypes.FIELD_LIST);
         assertEquals(1, list.size());
         assertEquals(dObj, list.get(0));
     }
 
     public void testGetKeys() {
-        String[] expectedKeys = { "columnString", "columnShort", "columnInt", "columnLong", "columnFloat",
-                "columnDouble", "columnBoolean", "columnDate", "columnBinary", "columnObject", "columnList" };
+        String[] expectedKeys = { AllJavaTypes.FIELD_STRING, AllJavaTypes.FIELD_SHORT, AllJavaTypes.FIELD_INT,
+                AllJavaTypes.FIELD_LONG, AllJavaTypes.FIELD_FLOAT, AllJavaTypes.FIELD_DOUBLE, AllJavaTypes.FIELD_BOOLEAN,
+                AllJavaTypes.FIELD_DATE, AllJavaTypes.FIELD_BINARY, AllJavaTypes.FIELD_OBJECT, AllJavaTypes.FIELD_LIST };
         String[] keys = dObj.getFieldNames();
         assertArrayEquals(expectedKeys, keys);
     }
