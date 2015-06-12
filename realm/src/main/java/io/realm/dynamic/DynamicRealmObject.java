@@ -216,4 +216,3 @@ public class DynamicRealmObject {
         return super.toString(); // TODO How to iterate across all fields?
     }
 }
-
