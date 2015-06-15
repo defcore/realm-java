@@ -16,8 +16,6 @@
 package io.realm.dynamic;
 
 import java.util.AbstractList;
-import java.util.Iterator;
-import java.util.ListIterator;
 
 import io.realm.Realm;
 import io.realm.internal.LinkView;
@@ -51,7 +49,7 @@ public class DynamicRealmList extends AbstractList<DynamicRealmObject> {
     @Override
     public DynamicRealmObject get(int index) {
         checkValidIndex(index);
-        return new DynamicRealmObject(realm, linkView.get(index));
+        return new DynamicRealmObject(realm, linkView.getCheckedRow(index));
     }
 
     @Override

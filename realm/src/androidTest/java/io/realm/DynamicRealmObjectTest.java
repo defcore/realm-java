@@ -306,6 +306,22 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
         assertEquals(dObj, list.get(0));
     }
 
+    public void testIsNullWithNullNotSupportedField() {
+        assertFalse(dObj.isNull(AllJavaTypes.FIELD_INT));
+    }
+
+    public void testIsNullTrue() {
+        realm.beginTransaction();
+        AllJavaTypes obj = realm.createObject(AllJavaTypes.class);
+        realm.commitTransaction();
+
+        assertTrue(new DynamicRealmObject(obj.realm, obj.row).isNull(AllJavaTypes.FIELD_OBJECT));
+    }
+
+    public void testIsNullFalse() {
+        assertFalse(dObj.isNull(AllJavaTypes.FIELD_OBJECT));
+    }
+
     public void testGetKeys() {
         String[] expectedKeys = { AllJavaTypes.FIELD_STRING, AllJavaTypes.FIELD_SHORT, AllJavaTypes.FIELD_INT,
                 AllJavaTypes.FIELD_LONG, AllJavaTypes.FIELD_FLOAT, AllJavaTypes.FIELD_DOUBLE, AllJavaTypes.FIELD_BOOLEAN,
@@ -314,13 +330,13 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
         assertArrayEquals(expectedKeys, keys);
     }
 
-    public void testEquals() {
-        AllJavaTypes obj1 = realm.where(AllJavaTypes.class).findFirst();
-        AllJavaTypes obj2 = realm.where(AllJavaTypes.class).findFirst();
-        DynamicRealmObject dObj1 = new DynamicRealmObject(realm, obj1.row);
-        DynamicRealmObject dObj2 = new DynamicRealmObject(realm, obj2.row);
-        assertTrue(dObj1.equals(dObj2));
-    }
+//    public void testEquals() {
+//        AllJavaTypes obj1 = realm.where(AllJavaTypes.class).findFirst();
+//        AllJavaTypes obj2 = realm.where(AllJavaTypes.class).findFirst();
+//        DynamicRealmObject dObj1 = new DynamicRealmObject(realm, obj1.row);
+//        DynamicRealmObject dObj2 = new DynamicRealmObject(realm, obj2.row);
+//        assertTrue(dObj1.equals(dObj2));
+//    }
 
     public void testHashcode() {
         AllJavaTypes obj1 = realm.where(AllJavaTypes.class).findFirst();
@@ -328,7 +344,7 @@ public class DynamicRealmObjectTest extends AndroidTestCase {
         assertEquals(obj1.hashCode(), dObj1.hashCode());
     }
 
-    public void testToString() {
-        // TODO
-    }
+//    public void testToString() {
+//        // TODO
+//    }
 }

@@ -20,10 +20,9 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmObject;
+import io.realm.internal.CheckedRow;
 import io.realm.internal.ColumnType;
 import io.realm.internal.Row;
-import io.realm.internal.Table;
 import io.realm.internal.TableOrView;
 
 /**
@@ -41,7 +40,7 @@ public class DynamicRealmObject {
      */
     public DynamicRealmObject(Realm realm, Row row) {
         this.realm = realm;
-        this.row = row;
+        this.row = (row instanceof CheckedRow) ? (CheckedRow) row : row.convertToChecked();
     }
 
     public boolean getBoolean(String fieldName) {
@@ -108,13 +107,24 @@ public class DynamicRealmObject {
         return row.getDate(columnIndex);
     }
 
+    /**
+     * Checks if the value of a given is {@code null}.
+     *
+     * @param fieldName Name of field. Use "." as separator to access fields in linked objects.
+     * @return {@code true} if field value is null, {@code false} otherwise.
+     */
+    public boolean isNull(String fieldName) {
+        long columnIndex = row.getColumnIndex(fieldName);
+        return row.isNullLink(columnIndex); // TODO Add support for other types
+    }
+
     public DynamicRealmObject getRealmObject(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
         checkFieldExists(columnIndex, fieldName);
         checkColumnType(ColumnType.LINK, columnIndex, fieldName);
         checkLinkedField(fieldName);
         long linkRowIndex = row.getLink(columnIndex);
-        Row linkRow = row.getTable().getRow(linkRowIndex);
+        CheckedRow linkRow = row.getTable().getCheckedRow(linkRowIndex);
         return new DynamicRealmObject(realm, linkRow);
     }
 
@@ -210,6 +220,15 @@ public class DynamicRealmObject {
 
         return true;
     }
+
+    public void setInt(int i) {
+
+    }
+
+    public void setInt(Integer j) {
+
+    }
+
 
     @Override
     public String toString() {
