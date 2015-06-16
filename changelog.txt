@@ -12,6 +12,7 @@
  * Fixed unchecked cast warnings when building with Realm.
  * Cleaned up examples (remove old test project).
  * Fixed a bug where RealmQuery objects are prematurely garbage collected.
+ * Added checking for missing generic type in RealmList fields in annotation processor.
 
 0.80.3
  * Calling Realm.copyToRealmOrUpdate() with an object with a null primary key now throws a proper exception.
