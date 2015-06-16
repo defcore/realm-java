@@ -45,8 +45,6 @@ public class DynamicRealmObject {
 
     public boolean getBoolean(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
-        checkFieldExists(columnIndex, fieldName);
-        checkColumnType(ColumnType.BOOLEAN, columnIndex, fieldName);
         checkLinkedField(fieldName);
         return row.getBoolean(columnIndex);
     }
@@ -61,48 +59,36 @@ public class DynamicRealmObject {
 
     public long getLong(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
-        checkFieldExists(columnIndex, fieldName);
-        checkColumnType(ColumnType.INTEGER, columnIndex, fieldName);
         checkLinkedField(fieldName);
         return row.getLong(columnIndex);
     }
 
     public float getFloat(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
-        checkFieldExists(columnIndex, fieldName);
-        checkColumnType(ColumnType.FLOAT, columnIndex, fieldName);
         checkLinkedField(fieldName);
         return row.getFloat(columnIndex);
     }
 
     public double getDouble(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
-        checkFieldExists(columnIndex, fieldName);
-        checkColumnType(ColumnType.DOUBLE, columnIndex, fieldName);
         checkLinkedField(fieldName);
         return row.getDouble(columnIndex);
     }
 
     public byte[] getBytes(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
-        checkFieldExists(columnIndex, fieldName);
-        checkColumnType(ColumnType.BINARY, columnIndex, fieldName);
         checkLinkedField(fieldName);
         return row.getBinaryByteArray(columnIndex);
     }
 
     public String getString(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
-        checkFieldExists(columnIndex, fieldName);
-        checkColumnType(ColumnType.STRING, columnIndex, fieldName);
         checkLinkedField(fieldName);
         return row.getString(columnIndex);
     }
 
     public Date getDate(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
-        checkFieldExists(columnIndex, fieldName);
-        checkColumnType(ColumnType.DATE, columnIndex, fieldName);
         checkLinkedField(fieldName);
         return row.getDate(columnIndex);
     }
@@ -120,8 +106,6 @@ public class DynamicRealmObject {
 
     public DynamicRealmObject getRealmObject(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
-        checkFieldExists(columnIndex, fieldName);
-        checkColumnType(ColumnType.LINK, columnIndex, fieldName);
         checkLinkedField(fieldName);
         long linkRowIndex = row.getLink(columnIndex);
         CheckedRow linkRow = row.getTable().getCheckedRow(linkRowIndex);
@@ -130,8 +114,6 @@ public class DynamicRealmObject {
 
     public DynamicRealmList getRealmList(String fieldName) {
         long columnIndex = row.getColumnIndex(fieldName);
-        checkFieldExists(columnIndex, fieldName);
-        checkColumnType(ColumnType.LINK_LIST, columnIndex, fieldName);
         checkLinkedField(fieldName);
         return new DynamicRealmList(row.getLinkList(columnIndex), realm);
     }
@@ -158,19 +140,6 @@ public class DynamicRealmObject {
             keys[i] = row.getColumnName(i);
         }
         return keys;
-    }
-
-    private void checkFieldExists(long columnIndex, String fieldName) {
-        if (columnIndex == TableOrView.NO_MATCH) {
-            throw new IllegalArgumentException("'" + fieldName + "' doesn't exist on " + row.getTable().getName());
-        }
-    }
-
-    private void checkColumnType(ColumnType expectedColumnType, long columnIndex, String fieldName) {
-        ColumnType columnType = row.getColumnType(columnIndex);
-        if (columnType != expectedColumnType) {
-            throw new IllegalArgumentException(fieldName + " is not the expected type. It is a " + columnType);
-        }
     }
 
     private void checkLinkedField(String fieldName) {
@@ -228,7 +197,6 @@ public class DynamicRealmObject {
     public void setInt(Integer j) {
 
     }
-
 
     @Override
     public String toString() {
